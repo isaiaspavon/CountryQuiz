@@ -5,5 +5,4 @@ Country Quiz is a simple quiz application, testing the user’s knowledge of cou
 
 ## Collaborators
 
-Tyler Simile
-Isaias Pavon 
+Tyler Simile & Isaias Pavon 
