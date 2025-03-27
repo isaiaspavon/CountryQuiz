@@ -20,5 +20,16 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-    }
-}
+
+        // Start AsyncCSVLoader to populate database
+        new AsyncCSVLoader(this).execute();
+
+        // Load the splash screen
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, new SplashFragment())
+                    .commit();
+        } // if
+
+    } // onCreate
+} // MainActivity
