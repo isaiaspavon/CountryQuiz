@@ -14,7 +14,7 @@ public class SplashFragment extends Fragment {
 
     public SplashFragment() {
         // Required empty public constructor
-    }
+    } // SplashFragment
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -47,7 +47,7 @@ public class SplashFragment extends Fragment {
         });
 
         return view;
-    }
+    } // onCreateView
 
     // AsyncTask to load SQLite database in the background
     private class LoadDatabaseTask extends AsyncTask<Void, Void, Void> {
