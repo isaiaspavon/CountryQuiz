@@ -1,8 +1,14 @@
 package edu.uga.cs.countryquiz;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import edu.uga.cs.countryquiz.models.Country;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
@@ -48,4 +54,25 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void initializeDatabase() {
         SQLiteDatabase db = this.getWritableDatabase(); // This ensures the tables are created
     } // initializeDatabase
+
+
+    public List<Country> getRandomCountries(int count) {
+        List<Country> countryList = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery("SELECT * FROM countries ORDER BY RANDOM() LIMIT ?", new String[]{String.valueOf(count)});
+
+        if (cursor.moveToFirst()) {
+            do {
+                int id = cursor.getInt(cursor.getColumnIndexOrThrow("id"));
+                String name = cursor.getString(cursor.getColumnIndexOrThrow("name"));
+                String continent = cursor.getString(cursor.getColumnIndexOrThrow("continent"));
+                countryList.add(new Country(id, name, continent));
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+        return countryList;
+    } // getRandomCountries
+
 } // DatabaseHelper
