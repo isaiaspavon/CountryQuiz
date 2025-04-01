@@ -17,62 +17,76 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static DatabaseHelper instance;
 
+    // Table names
+    public static final String TABLE_COUNTRIES = "countries";
+    public static final String TABLE_QUIZ_RESULTS = "quiz_results";
+
+    // Column names for countries table
+    public static final String COLUMN_COUNTRY_ID = "id";
+    public static final String COLUMN_COUNTRY_NAME = "name";
+    public static final String COLUMN_CONTINENT = "continent";
+
+    // Column names for quiz_results table
+    public static final String COLUMN_QUIZ_ID = "id";
+    public static final String COLUMN_DATE = "date";
+    public static final String COLUMN_SCORE = "score";
+
     // Table creation queries
     private static final String CREATE_TABLE_COUNTRIES =
-            "CREATE TABLE IF NOT EXISTS countries (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, continent TEXT);";
+            "CREATE TABLE IF NOT EXISTS " + TABLE_COUNTRIES + " (" +
+                    COLUMN_COUNTRY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    COLUMN_COUNTRY_NAME + " TEXT, " +
+                    COLUMN_CONTINENT + " TEXT);";
 
     private static final String CREATE_TABLE_QUIZ_RESULTS =
-            "CREATE TABLE IF NOT EXISTS quiz_results (id INTEGER PRIMARY KEY AUTOINCREMENT, date TEXT, score INTEGER);";
+            "CREATE TABLE IF NOT EXISTS " + TABLE_QUIZ_RESULTS + " (" +
+                    COLUMN_QUIZ_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    COLUMN_DATE + " TEXT, " +
+                    COLUMN_SCORE + " INTEGER);";
 
     // Private constructor to prevent direct instantiation
     private DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
-    } // DatabaseHelper
+    }
 
     // Singleton pattern: Get instance
     public static synchronized DatabaseHelper getInstance(Context context) {
         if (instance == null) {
             instance = new DatabaseHelper(context.getApplicationContext());
-        } // if
+        }
         return instance;
-    } // DatabaseHelper
+    }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_TABLE_COUNTRIES);
         db.execSQL(CREATE_TABLE_QUIZ_RESULTS);
-    } // onCreate
+    }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS countries");
-        db.execSQL("DROP TABLE IF EXISTS quiz_results");
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_COUNTRIES);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_QUIZ_RESULTS);
         onCreate(db);
-    } // onUpgrade
+    }
 
-    // Method to initialize the database (called from SplashFragment)
-    public void initializeDatabase() {
-        SQLiteDatabase db = this.getWritableDatabase(); // This ensures the tables are created
-    } // initializeDatabase
-
-
+    // Get random countries for quizzes
     public List<Country> getRandomCountries(int count) {
         List<Country> countryList = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor cursor = db.rawQuery("SELECT * FROM countries ORDER BY RANDOM() LIMIT ?", new String[]{String.valueOf(count)});
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_COUNTRIES + " ORDER BY RANDOM() LIMIT ?", new String[]{String.valueOf(count)});
 
         if (cursor.moveToFirst()) {
             do {
-                int id = cursor.getInt(cursor.getColumnIndexOrThrow("id"));
-                String name = cursor.getString(cursor.getColumnIndexOrThrow("name"));
-                String continent = cursor.getString(cursor.getColumnIndexOrThrow("continent"));
+                int id = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_COUNTRY_ID));
+                String name = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_COUNTRY_NAME));
+                String continent = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_CONTINENT));
                 countryList.add(new Country(id, name, continent));
             } while (cursor.moveToNext());
         }
 
         cursor.close();
         return countryList;
-    } // getRandomCountries
-
-} // DatabaseHelper
+    }
+}

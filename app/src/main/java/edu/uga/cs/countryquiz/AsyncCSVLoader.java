@@ -16,7 +16,7 @@ public class AsyncCSVLoader extends AsyncTask<Void, Void, Void> {
 
     public AsyncCSVLoader(Context context) {
         this.context = context;
-        this.dbHelper = new DatabaseHelper(context);
+        this.dbHelper = DatabaseHelper.getInstance(context);
     } // AsyncCSVLoader
 
     @Override
