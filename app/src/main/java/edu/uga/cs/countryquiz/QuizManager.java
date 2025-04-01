@@ -46,7 +46,7 @@ public class QuizManager {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
 
-        String currentDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        String currentDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(new Date());
         values.put(DatabaseHelper.COLUMN_DATE, currentDate);
         values.put(DatabaseHelper.COLUMN_SCORE, score);
 

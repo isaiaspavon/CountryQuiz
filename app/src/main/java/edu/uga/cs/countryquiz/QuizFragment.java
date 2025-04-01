@@ -13,6 +13,9 @@ import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import edu.uga.cs.countryquiz.models.Country;
@@ -93,5 +96,22 @@ public class QuizFragment extends Fragment {
         transaction.replace(R.id.fragment_container, new ResultFragment());
         transaction.addToBackStack(null);
         transaction.commit();
+    }
+
+    private List<String> getRandomChoices(String correctAnswer) {
+        List<String> choices = new ArrayList<>();
+        choices.add(correctAnswer);
+
+        List<String> allContinents = Arrays.asList("Africa", "Asia", "Europe", "North America", "South America", "Oceania", "Antarctica");
+        Collections.shuffle(allContinents);
+
+        for (String continent : allContinents) {
+            if (!choices.contains(continent) && choices.size() < 4) {
+                choices.add(continent);
+            }
+        }
+
+        Collections.shuffle(choices);
+        return choices;
     }
 }
