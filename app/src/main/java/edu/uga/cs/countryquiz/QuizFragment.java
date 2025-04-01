@@ -102,7 +102,8 @@ public class QuizFragment extends Fragment {
         List<String> choices = new ArrayList<>();
         choices.add(correctAnswer);
 
-        List<String> allContinents = Arrays.asList("Africa", "Asia", "Europe", "North America", "South America", "Oceania", "Antarctica");
+        // Get all distinct continents from the database
+        List<String> allContinents = quizManager.getAllContinents();
         Collections.shuffle(allContinents);
 
         for (String continent : allContinents) {

@@ -72,5 +72,19 @@ public class QuizManager {
         cursor.close();
         return results;
     } // getPastQuizResult
+
+    public List<String> getAllContinents() {
+        List<String> continents = new ArrayList<>();
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery("SELECT DISTINCT continent FROM countries", null);
+        while (cursor.moveToNext()) {
+            continents.add(cursor.getString(cursor.getColumnIndexOrThrow("continent")));
+        }
+
+        cursor.close();
+        return continents;
+    }
+
 } // QuizManager
 
