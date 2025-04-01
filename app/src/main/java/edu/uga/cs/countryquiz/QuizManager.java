@@ -11,6 +11,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import edu.uga.cs.countryquiz.models.QuizResult;
+
 public class QuizManager {
 
     private DatabaseHelper dbHelper;
@@ -21,26 +23,26 @@ public class QuizManager {
     public QuizManager(Context context, int totalQuestions) {
         this.dbHelper = DatabaseHelper.getInstance(context);
         this.totalQuestions = totalQuestions;
-    }
+    } // quizManager
 
     public void updateScore(boolean isCorrect) {
         if (isCorrect) {
             score++;
-        }
+        } // if
         questionsAnswered++;
-    }
+    } // updateScore
 
     public int getScore() {
         return score;
-    }
+    } // getScore
 
     public int getQuestionsAnswered() {
         return questionsAnswered;
-    }
+    } // getQuestionsAnswered
 
     public boolean isQuizComplete() {
         return questionsAnswered >= totalQuestions;
-    }
+    } // isQuizComplete
 
     public void saveQuizResult() {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -52,21 +54,23 @@ public class QuizManager {
 
         db.insert(DatabaseHelper.TABLE_QUIZ_RESULTS, null, values);
         db.close();
-    }
+    } // saveQuizResult
 
-    public List<String> getPastQuizResults() {
-        List<String> results = new ArrayList<>();
+
+    public List<QuizResult> getPastQuizResults() {
+        List<QuizResult> results = new ArrayList<>();
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
         Cursor cursor = db.rawQuery("SELECT * FROM " + DatabaseHelper.TABLE_QUIZ_RESULTS, null);
         while (cursor.moveToNext()) {
-            int score = cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_SCORE));
+            int id = cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_QUIZ_ID));
             String date = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_DATE));
-            results.add("Score: " + score + " | Date: " + date);
+            int score = cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_SCORE));
+            results.add(new QuizResult(id, date, score));
         }
 
         cursor.close();
         return results;
-    }
-}
+    } // getPastQuizResult
+} // QuizManager
 
