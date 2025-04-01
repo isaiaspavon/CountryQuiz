@@ -55,16 +55,15 @@ public class SplashFragment extends Fragment {
 
         public LoadDatabaseTask(Context context) {
             this.context = context;
-        } // LoadDatabaseTask
+        }
 
         @Override
         protected Void doInBackground(Void... voids) {
             DatabaseHelper db = DatabaseHelper.getInstance(context);
-            db.initializeDatabase();
+            db.getWritableDatabase(); // This ensures tables are created
             return null;
         } // doInBackground
     } // LoadDatabaseTask
-
 
 
 } // SplashFragment
