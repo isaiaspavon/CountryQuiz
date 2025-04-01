@@ -35,6 +35,14 @@ public class QuizFragment extends Fragment {
         // Required empty constructor
     }
 
+    public static QuizFragment newInstance(int questionIndex) {
+        QuizFragment fragment = new QuizFragment();
+        Bundle args = new Bundle();
+        args.putInt("questionIndex", questionIndex); // Pass the index
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_quiz, container, false);
@@ -46,6 +54,10 @@ public class QuizFragment extends Fragment {
         dbHelper = DatabaseHelper.getInstance(getActivity());
         quizCountries = dbHelper.getRandomCountries(6);
         quizManager = new QuizManager(getActivity(), quizCountries.size());
+
+        if (getArguments() != null) {
+            currentQuestionIndex = getArguments().getInt("questionIndex", 0);
+        }
 
         displayQuestion();
 

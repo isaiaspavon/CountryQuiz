@@ -1,20 +1,18 @@
 package edu.uga.cs.countryquiz;
 
-import android.content.Context;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 public class SplashFragment extends Fragment {
 
     public SplashFragment() {
         // Required empty public constructor
-    } // SplashFragment
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -26,44 +24,35 @@ public class SplashFragment extends Fragment {
         Button startQuizButton = view.findViewById(R.id.start_quiz_button);
         Button viewResultsButton = view.findViewById(R.id.view_results_button);
 
-        // Load SQLite database in the background (only if needed)
-        new LoadDatabaseTask(getActivity()).execute();
-
         // Set button listeners
         startQuizButton.setOnClickListener(v -> {
-            // Replace SplashFragment with QuizFragment
-            FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-            transaction.replace(R.id.fragment_container, new QuizFragment());
-            transaction.addToBackStack(null);
-            transaction.commit();
+            // Transition to the QuizFragment when "Start Quiz" is clicked
+            if (getActivity() != null) {
+                ((MainActivity) getActivity()).startQuiz();
+            }
         });
 
         viewResultsButton.setOnClickListener(v -> {
-            // Replace SplashFragment with ResultFragment
-            FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-            transaction.replace(R.id.fragment_container, new ResultFragment());
-            transaction.addToBackStack(null);
-            transaction.commit();
+            // Optionally, transition to a ResultsFragment
+            transitionToResultsFragment();
         });
 
         return view;
-    } // onCreateView
+    }
 
-    // AsyncTask to load SQLite database in the background
-    private class LoadDatabaseTask extends AsyncTask<Void, Void, Void> {
-        private Context context;
+    private void transitionToQuizFragment() {
+        // Replace SplashFragment with QuizFragment
+        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragment_container, new QuizFragment());
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
 
-        public LoadDatabaseTask(Context context) {
-            this.context = context;
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            DatabaseHelper db = DatabaseHelper.getInstance(context);
-            db.getWritableDatabase(); // This ensures tables are created
-            return null;
-        } // doInBackground
-    } // LoadDatabaseTask
-
-
-} // SplashFragment
+    private void transitionToResultsFragment() {
+        // Replace SplashFragment with ResultFragment
+        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragment_container, new ResultFragment());
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
+}
