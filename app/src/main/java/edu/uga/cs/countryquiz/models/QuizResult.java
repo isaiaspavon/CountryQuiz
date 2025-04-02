@@ -9,17 +9,17 @@ public class QuizResult {
         this.id = id;
         this.date = date;
         this.score = score;
-    }
+    } // QuizResult
 
     public int getId() {
         return id;
-    }
+    } // getId
 
     public String getDate() {
         return date;
-    }
+    } // getDate
 
     public int getScore() {
         return score;
-    }
-}
+    } // getScore
+} // QuizResults
