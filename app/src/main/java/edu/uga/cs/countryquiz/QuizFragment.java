@@ -104,11 +104,18 @@ public class QuizFragment extends Fragment {
         quizManager.saveQuizResult();
         Toast.makeText(getActivity(), "Quiz Over! Score: " + quizManager.getScore() + "/" + quizCountries.size(), Toast.LENGTH_LONG).show();
 
+        // Make sure fragment container is visible
+        getActivity().findViewById(R.id.fragment_container).setVisibility(View.VISIBLE);
+        // Hide ViewPager2
+        getActivity().findViewById(R.id.viewpager).setVisibility(View.GONE);
+
+        // Transition to results page
         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.fragment_container, new ResultFragment());
         transaction.addToBackStack(null);
-        transaction.commit();
+        transaction.commitAllowingStateLoss();
     }
+
 
     private List<String> getRandomChoices(String correctAnswer) {
         List<String> choices = new ArrayList<>();
