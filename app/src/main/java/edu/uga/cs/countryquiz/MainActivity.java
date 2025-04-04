@@ -14,10 +14,19 @@ import java.util.List;
 
 import edu.uga.cs.countryquiz.models.Country;
 
+/**
+ * MainActivity serves as the entry point for the Country Quiz app.
+ * It initializes the quiz by retrieving random countries from the database.
+ */
 public class MainActivity extends AppCompatActivity {
 
     private List<Country> quizCountries;
 
+    /**
+     * Called when the activity is first created.
+     * Sets up the UI, initializes the database, retrieves quiz data, and handles splash screen transition.
+     * @param savedInstanceState Bundle containing previously activity's saved data
+     **/
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,14 +55,15 @@ public class MainActivity extends AppCompatActivity {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_container, new SplashFragment())
                     .commit();
-        }
-    }
+        } // if
+
+    } // onCreate
 
     // Method to hide the splash screen and show the ViewPager2
     public void startQuiz() {
         findViewById(R.id.viewpager).setVisibility(View.VISIBLE);
         findViewById(R.id.fragment_container).setVisibility(View.GONE);
-    }
+    } // startQuiz
 
 
-}
+} // MainActivity
