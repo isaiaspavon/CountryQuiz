@@ -10,6 +10,10 @@ import java.util.List;
 
 import edu.uga.cs.countryquiz.models.Country;
 
+/**
+ * DatabaseHelper class for managing the SQLite database used in the Country Quiz app.
+ * This class follows the Singleton pattern to ensure only one instance of the database exists.
+ */
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "country_quiz.db";
@@ -44,33 +48,60 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     COLUMN_DATE + " TEXT, " +
                     COLUMN_SCORE + " INTEGER);";
 
-    // Private constructor to prevent direct instantiation
+    /**
+     * Private constructor to prevent direct instantiation.
+     *
+     * @param context The application context.
+     */
     private DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
-    }
+    } // DatabaseHelper
 
-    // Singleton pattern: Get instance
+
+    /**
+     * Retrieves the singleton instance of DatabaseHelper.
+     *
+     * @param context The application context.
+     * @return The singleton instance of DatabaseHelper.
+     */
     public static synchronized DatabaseHelper getInstance(Context context) {
         if (instance == null) {
             instance = new DatabaseHelper(context.getApplicationContext());
-        }
+        } // if
         return instance;
-    }
+    } // DatabaseHelper
 
+    /**
+     * Creates the database tables when the database is first initialized.
+     *
+     * @param db The SQLiteDatabase instance.
+     */
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_TABLE_COUNTRIES);
         db.execSQL(CREATE_TABLE_QUIZ_RESULTS);
-    }
+    } // onCreate
 
+    /**
+     * Upgrades the database by dropping and recreating tables when the database version changes.
+     *
+     * @param db         The SQLiteDatabase instance.
+     * @param oldVersion The previous database version.
+     * @param newVersion The new database version.
+     */
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_COUNTRIES);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_QUIZ_RESULTS);
         onCreate(db);
-    }
+    } // onUpgrade
 
-    // Get random countries for quizzes
+    /**
+     * Retrieves a specified number of random countries from the database.
+     *
+     * @param count The number of countries to retrieve.
+     * @return A list of random Country objects.
+     */
     public List<Country> getRandomCountries(int count) {
         List<Country> countryList = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
@@ -83,10 +114,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 String name = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_COUNTRY_NAME));
                 String continent = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_CONTINENT));
                 countryList.add(new Country(id, name, continent));
-            } while (cursor.moveToNext());
-        }
+            } while (cursor.moveToNext()); // do-while
+        } // if
 
         cursor.close();
         return countryList;
-    }
-}
+    } // getRandomCountries
+
+} // DatabaseHelper
