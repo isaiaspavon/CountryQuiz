@@ -13,21 +13,44 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * A fragment that displays past quiz results in a ListView.
+ */
 public class ResultFragment extends Fragment {
 
     private ListView resultsListView;
     private QuizManager quizManager;
 
+    /**
+     * Default constructor (required for fragments).
+     */
     public ResultFragment() {
         // Required empty public constructor
-    }
+    } // ResultFragment
 
+    /**
+     * Called when the fragment is created.
+     * Initializes the QuizManager with a context and sets the total number of questions to 0,
+     * as this fragment is only concerned with displaying past quiz results.
+     *
+     * @param savedInstanceState The saved instance state, or null if this is a new instance.
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         quizManager = new QuizManager(getActivity(), 0);  // Passing 0 since we aren't concerned with total questions here
-    }
+    } // onCreate
 
+    /**
+     * Inflates the fragment layout and sets up the ListView to display past quiz results.
+     * It retrieves past results from the QuizManager, formats the data, and uses a SimpleAdapter
+     * to bind the results to the ListView for display.
+     *
+     * @param inflater The LayoutInflater object used to inflate the view.
+     * @param container The parent view that this fragment's UI will be attached to.
+     * @param savedInstanceState A bundle containing the fragment's state, or null if none.
+     * @return The root view of the fragment's layout.
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -47,7 +70,7 @@ public class ResultFragment extends Fragment {
             map.put("date", result[0]);  // Date
             map.put("score", result[1]);  // Score
             data.add(map);
-        }
+        } // for
 
         // Use SimpleAdapter to bind data to ListView
         SimpleAdapter adapter = new SimpleAdapter(getActivity(), data,
@@ -58,5 +81,6 @@ public class ResultFragment extends Fragment {
         resultsListView.setAdapter(adapter);
 
         return view;
-    }
-}
+    } // onCreateView
+
+} // ResultFragment
