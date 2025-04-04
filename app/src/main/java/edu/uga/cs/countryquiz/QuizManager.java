@@ -57,21 +57,20 @@ public class QuizManager {
     } // saveQuizResult
 
 
-    public List<QuizResult> getPastQuizResults() {
-        List<QuizResult> results = new ArrayList<>();
+    public List<String[]> getPastQuizResults() {
+        List<String[]> results = new ArrayList<>();
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
         Cursor cursor = db.rawQuery("SELECT * FROM " + DatabaseHelper.TABLE_QUIZ_RESULTS, null);
         while (cursor.moveToNext()) {
-            int id = cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_QUIZ_ID));
             String date = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_DATE));
             int score = cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_SCORE));
-            results.add(new QuizResult(id, date, score));
+            results.add(new String[] {date, String.valueOf(score)});
         }
 
         cursor.close();
         return results;
-    } // getPastQuizResult
+    }
 
     public List<String> getAllContinents() {
         List<String> continents = new ArrayList<>();
